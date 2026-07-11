@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+
+<html lang="vi">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>
+Quản lý khách tham quan
+</title>
+
+
+<style>
+
+body{
+
+font-family: Arial;
+padding:20px;
+
+}
+
+
+h1{
+
+color:#8B4513;
+
+}
+
+
+
+input{
+
+padding:10px;
+
+margin:5px;
+
+width:220px;
+
+}
+
+
+
+button{
+
+padding:10px 15px;
+
+background:#8B4513;
+
+color:white;
+
+border:none;
+
+cursor:pointer;
+
+margin:5px;
+
+}
+
+
+
+button:hover{
+
+opacity:0.8;
+
+}
+
+
+
+table{
+
+width:100%;
+
+margin-top:20px;
+
+border-collapse:collapse;
+
+}
+
+
+
+th{
+
+background:#d2a679;
+
+}
+
+
+
+th,td{
+
+padding:12px;
+
+text-align:center;
+
+border:1px solid #999;
+
+}
+
+
+
+.xoa{
+
+background:red;
+
+}
+
+
+</style>
+
+
+</head>
+
+
+<body>
+
+
+
+<h1>
+👥 QUẢN LÝ KHÁCH THAM QUAN
+</h1>
+
+
+
+<div>
+
+
+<input 
+id="ten"
+placeholder="Họ và tên">
+
+
+
+<input 
+id="sdt"
+placeholder="Số điện thoại">
+
+
+
+<button onclick="themKhach()">
+
+➕ Thêm khách
+
+</button>
+
+
+
+<input 
+id="timkiem"
+placeholder="🔍 Tìm tên khách..."
+onkeyup="timKhach()">
+
+
+
+</div>
+
+
+
+
+<table id="bang">
+
+
+<tr>
+
+<th>
+STT
+</th>
+
+
+<th>
+Họ tên
+</th>
+
+
+<th>
+Số điện thoại
+</th>
+
+
+<th>
+Thao tác
+</th>
+
+
+</tr>
+
+
+</table>
+
+
+
+
+
+<script>
+
+
+// Lấy dữ liệu đã lưu
+
+let danhSach = JSON.parse(localStorage.getItem("khach")) || [];
+
+
+
+// Hiển thị dữ liệu khi mở trang
+
+hienThi();
+
+
+
+
+// ========================
+
+// THÊM KHÁCH
+
+// ========================
+
+
+function themKhach(){
+
+
+let ten = document.getElementById("ten").value;
+
+
+let sdt = document.getElementById("sdt").value;
+
+
+
+if(ten=="" || sdt==""){
+
+
+alert("Vui lòng nhập đầy đủ thông tin");
+
+
+return;
+
+
+}
+
+
+
+let khachMoi = {
+
+
+ten:ten,
+
+sdt:sdt
+
+
+};
+
+
+
+danhSach.push(khachMoi);
+
+
+
+luuDuLieu();
+
+
+
+hienThi();
+
+
+
+document.getElementById("ten").value="";
+
+
+document.getElementById("sdt").value="";
+
+
+}
+
+
+
+
+
+// ========================
+
+// HIỂN THỊ DANH SÁCH
+
+// ========================
+
+
+function hienThi(){
+
+
+let bang=document.getElementById("bang");
+
+
+
+bang.innerHTML = `
+
+
+<tr>
+
+<th>
+STT
+</th>
+
+
+<th>
+Họ tên
+</th>
+
+
+<th>
+Số điện thoại
+</th>
+
+
+<th>
+Thao tác
+</th>
+
+
+</tr>
+
+
+`;
+
+
+
+danhSach.forEach(function(khach,index){
+
+
+
+bang.innerHTML += `
+
+
+<tr>
+
+
+<td>
+
+${index+1}
+
+</td>
+
+
+
+<td>
+
+${khach.ten}
+
+</td>
+
+
+
+<td>
+
+${khach.sdt}
+
+</td>
+
+
+
+<td>
+
+
+<button class="xoa"
+
+onclick="xoaKhach(${index})">
+
+Xóa
+
+</button>
+
+
+</td>
+
+
+</tr>
+
+
+`;
+
+
+
+});
+
+
+
+}
+
+
+
+
+
+// ========================
+
+// XÓA KHÁCH
+
+// ========================
+
+
+function xoaKhach(index){
+
+
+danhSach.splice(index,1);
+
+
+
+luuDuLieu();
+
+
+
+hienThi();
+
+
+}
+
+
+
+
+
+// ========================
+
+// LƯU DỮ LIỆU
+
+// ========================
+
+
+function luuDuLieu(){
+
+
+localStorage.setItem(
+
+"khach",
+
+JSON.stringify(danhSach)
+
+);
+
+
+}
+
+
+
+
+
+// ========================
+
+// TÌM KIẾM
+
+// ========================
+
+
+function timKhach(){
+
+
+let tuKhoa = document
+.getElementById("timkiem")
+.value
+.toLowerCase();
+
+
+
+let bang=document.getElementById("bang");
+
+
+
+bang.innerHTML = `
+
+
+<tr>
+
+<th>
+STT
+</th>
+
+
+<th>
+Họ tên
+</th>
+
+
+<th>
+Số điện thoại
+</th>
+
+
+<th>
+Thao tác
+</th>
+
+
+</tr>
+
+
+`;
+
+
+
+danhSach.forEach(function(khach,index){
+
+
+
+if(
+
+khach.ten.toLowerCase().includes(tuKhoa)
+
+){
+
+
+
+bang.innerHTML += `
+
+
+<tr>
+
+
+<td>
+${index+1}
+</td>
+
+
+<td>
+${khach.ten}
+</td>
+
+
+<td>
+${khach.sdt}
+</td>
+
+
+<td>
+
+
+<button class="xoa"
+
+onclick="xoaKhach(${index})">
+
+Xóa
+
+</button>
+
+
+</td>
+
+
+</tr>
+
+
+`;
+
+
+
+}
+
+
+});
+
+
+}
+
+
+
+</script>
+
+
+</body>
+
+
+</html>
