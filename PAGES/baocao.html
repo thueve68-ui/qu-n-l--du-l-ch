@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+
+<html lang="vi">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>
+Báo cáo du lịch
+</title>
+
+
+<style>
+
+body{
+
+font-family:Arial;
+
+padding:20px;
+
+}
+
+
+h1{
+
+color:#8B4513;
+
+}
+
+
+
+.box{
+
+display:flex;
+
+gap:20px;
+
+flex-wrap:wrap;
+
+}
+
+
+
+.card{
+
+width:220px;
+
+padding:20px;
+
+background:#d2a679;
+
+border-radius:10px;
+
+text-align:center;
+
+font-size:18px;
+
+}
+
+
+
+.so{
+
+font-size:35px;
+
+font-weight:bold;
+
+color:#8B4513;
+
+}
+
+
+
+table{
+
+width:100%;
+
+margin-top:30px;
+
+border-collapse:collapse;
+
+}
+
+
+
+th,td{
+
+border:1px solid #999;
+
+padding:10px;
+
+text-align:center;
+
+}
+
+
+
+th{
+
+background:#d2a679;
+
+}
+
+
+</style>
+
+
+</head>
+
+
+
+<body>
+
+
+
+<h1>
+📄 BÁO CÁO QUẢN LÝ KHU DU LỊCH
+</h1>
+
+
+
+
+<div class="box">
+
+
+
+<div class="card">
+
+👥
+
+<p>
+Khách tham quan
+</p>
+
+<div class="so" id="khach">
+0
+</div>
+
+</div>
+
+
+
+
+<div class="card">
+
+🎫
+
+<p>
+Số vé bán
+</p>
+
+<div class="so" id="ve">
+0
+</div>
+
+</div>
+
+
+
+
+<div class="card">
+
+💰
+
+<p>
+Doanh thu
+</p>
+
+<div class="so" id="doanhthu">
+0
+</div>
+
+VNĐ
+
+</div>
+
+
+
+
+<div class="card">
+
+📍
+
+<p>
+Điểm tham quan
+</p>
+
+<div class="so" id="tram">
+0
+</div>
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<h2>
+📊 Chi tiết vé
+</h2>
+
+
+
+<table id="bang">
+
+
+<tr>
+
+<th>
+Tên vé
+</th>
+
+
+<th>
+Giá vé
+</th>
+
+
+<th>
+Số lượng
+</th>
+
+
+<th>
+Thành tiền
+</th>
+
+
+</tr>
+
+
+</table>
+
+
+
+
+
+
+
+<script>
+
+
+// LẤY DỮ LIỆU
+
+
+let khach = JSON.parse(
+
+localStorage.getItem("khach")
+
+) || [];
+
+
+
+let ve = JSON.parse(
+
+localStorage.getItem("ve")
+
+) || [];
+
+
+
+let tram = JSON.parse(
+
+localStorage.getItem("tram")
+
+) || [];
+
+
+
+
+
+// HIỂN THỊ SỐ LƯỢNG
+
+
+document.getElementById("khach").innerHTML = khach.length;
+
+
+
+document.getElementById("ve").innerHTML = ve.length;
+
+
+
+document.getElementById("tram").innerHTML = tram.length;
+
+
+
+
+
+
+// TÍNH DOANH THU
+
+
+let tong = 0;
+
+
+let bang = document.getElementById("bang");
+
+
+
+
+
+if(ve.length == 0){
+
+
+bang.innerHTML += `
+
+
+<tr>
+
+<td colspan="4">
+
+Chưa có dữ liệu vé
+
+</td>
+
+</tr>
+
+
+`;
+
+
+
+}
+
+
+
+else{
+
+
+ve.forEach(function(item){
+
+
+
+let gia = Number(item.gia) || 0;
+
+
+let soluong = Number(item.soLuong) || 0;
+
+
+
+let tien = gia * soluong;
+
+
+
+tong += tien;
+
+
+
+
+bang.innerHTML += `
+
+
+<tr>
+
+
+<td>
+
+${item.loai || "Vé du lịch"}
+
+</td>
+
+
+
+<td>
+
+${gia.toLocaleString()} VNĐ
+
+</td>
+
+
+
+<td>
+
+${soluong}
+
+</td>
+
+
+
+<td>
+
+${tien.toLocaleString()} VNĐ
+
+</td>
+
+
+</tr>
+
+
+`;
+
+
+
+});
+
+
+
+}
+
+
+
+
+// HIỂN THỊ TỔNG TIỀN
+
+
+document.getElementById("doanhthu").innerHTML =
+
+tong.toLocaleString();
+
+
+
+
+</script>
+
+
+
+
+</body>
+
+
+</html>
